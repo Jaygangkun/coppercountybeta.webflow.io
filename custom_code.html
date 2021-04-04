@@ -1,0 +1,78 @@
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+
+        // init destination mega menu
+
+        jQuery('.mega-menu-sub-menu-title').text('');
+        jQuery('.mega-sub-sub-menu-links').html('');
+
+        // desktop mega menu
+        jQuery(document).on('click', '.mega-menu-sub-link', function(){
+            var filter = jQuery(this).attr('filter');
+
+            var mega_menu_wrap = jQuery(this).parents('.mega-menu-wrap');
+
+            jQuery(mega_menu_wrap).find('.mega-menu-sub-menu-title').text(filter);
+
+            jQuery(mega_menu_wrap).find('.mega-sub-sub-menu-links').html('');
+
+            var dbList = jQuery(mega_menu_wrap).find('.mega-sub-menu-content-db .w-dyn-item');
+            for(var index = 0; index < dbList.length; index++){
+                var category = jQuery(dbList[index]).find('.mega-sub-menu-content-db-cell-category').text();
+                var name = jQuery(dbList[index]).find('.mega-sub-menu-content-db-cell-name').text();
+                var link = jQuery(dbList[index]).find('.mega-sub-menu-content-db-cell-link').attr('href');
+
+                if(category.trim() == filter.trim()){
+                    jQuery(mega_menu_wrap).find('.mega-sub-sub-menu-links').append('<a href="' + link + '" class="mega-menu-sub-sub-link" tabindex="0">' + name + '</a>');
+                }
+                
+            }
+            
+        })
+
+        // mobile mega sub menu
+        jQuery(document).on('click', '.mobile-mega-sub-menu-title-wrap', function(){
+
+            var mega_sub_menu_wrap = jQuery(this).parents('.mobile-mega-sub-menu-wrap');
+
+            if(!jQuery(this).hasClass('loaded')){
+                var filter = jQuery(this).attr('filter');
+                var dbName = jQuery(this).parents('.dropdown-list').attr('db');
+                var dbList = jQuery('.mega-sub-menu-content-db[db="'+ dbName + '"] .w-dyn-item');
+
+                jQuery(mega_sub_menu_wrap).find('.mobile-mega-sub-menu-content-wrap').html('');
+
+                var added = 0;
+                for(var index = 0; index < dbList.length; index++){
+                    var category = jQuery(dbList[index]).find('.mega-sub-menu-content-db-cell-category').text();
+                    var name = jQuery(dbList[index]).find('.mega-sub-menu-content-db-cell-name').text();
+                    var link = jQuery(dbList[index]).find('.mega-sub-menu-content-db-cell-link').attr('href');
+
+                    if(category.trim() == filter.trim()){
+                        jQuery(mega_sub_menu_wrap).find('.mobile-mega-sub-menu-content-wrap').append('<a href="' + link + '" class="mobile-mega-sub-sub-menu-link" tabindex="0">' + name + '</a>');
+                        added++;
+                    }
+                }
+
+                jQuery(this).addClass('loaded');
+
+                if(added == 0){
+                    jQuery(mega_sub_menu_wrap).find('.mobile-mega-sub-menu-content-wrap').append('<div class="mobile-mega-sub-sub-menu-no-content">No Items</div>');
+                }
+            }
+            
+            if(!jQuery(this).hasClass('open')){
+                jQuery('.mobile-mega-sub-menu-content-wrap').slideUp();
+                jQuery('.mobile-mega-sub-menu-title-wrap').removeClass('open');
+
+                jQuery(mega_sub_menu_wrap).find('.mobile-mega-sub-menu-content-wrap').slideDown();
+                jQuery(this).addClass('open');
+            }
+            else{                
+                jQuery(mega_sub_menu_wrap).find('.mobile-mega-sub-menu-content-wrap').slideUp();
+                jQuery(this).removeClass('open');
+            }
+
+        })
+    })
+  </script>
